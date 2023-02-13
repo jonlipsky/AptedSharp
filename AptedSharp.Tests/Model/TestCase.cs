@@ -30,13 +30,13 @@ namespace AptedSharp.Tests.Model;
 /// </summary>
 public class TestCase
 {
-    [JsonPropertyName("testId")] public int TestId { get; set; }
+    [JsonPropertyName("testId")] public int TestId { get; init; }
 
-    [JsonPropertyName("t1")] public string T1 { get; set; }
+    [JsonPropertyName("t1")] public string T1 { get; init; } = null!;
 
-    [JsonPropertyName("t2")] public string T2 { get; set; }
+    [JsonPropertyName("t2")] public string T2 { get; init; } = null!;
 
-    [JsonPropertyName("d")] public int D { get; set; }
+    [JsonPropertyName("d")] public int D { get; init; }
 
     public override string ToString()
     {

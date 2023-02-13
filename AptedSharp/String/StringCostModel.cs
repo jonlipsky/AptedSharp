@@ -22,44 +22,45 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp.String;
-
-/// <summary>
-/// This is a unit-cost model defined on strings.
-/// </summary>
-public class StringCostModel : ICostModel<string>
+namespace AptedSharp.String
 {
     /// <summary>
-    /// Calculates the cost of deleting a node.
+    ///     This is a unit-cost model defined on strings.
     /// </summary>
-    /// <param name="n">a node considered to be deleted.</param>
-    /// <returns>{@code 1} - a fixed cost of deleting a node.</returns>
-    public float Delete(INode<string> n)
+    public class StringCostModel : ICostModel<string>
     {
-        return 1.0f;
-    }
+        /// <summary>
+        ///     Calculates the cost of deleting a node.
+        /// </summary>
+        /// <param name="n">a node considered to be deleted.</param>
+        /// <returns>{@code 1} - a fixed cost of deleting a node.</returns>
+        public float Delete(INode<string> n)
+        {
+            return 1.0f;
+        }
 
-    /// <summary>
-    /// Calculates the cost of inserting a node.
-    /// </summary>
-    /// <param name="n">a node considered to be inserted.</param>
-    /// <returns>{@code 1} - a fixed cost of inserting a node.</returns>
-    public float Insert(INode<string> n)
-    {
-        return 1.0f;
-    }
+        /// <summary>
+        ///     Calculates the cost of inserting a node.
+        /// </summary>
+        /// <param name="n">a node considered to be inserted.</param>
+        /// <returns>{@code 1} - a fixed cost of inserting a node.</returns>
+        public float Insert(INode<string> n)
+        {
+            return 1.0f;
+        }
 
-    /// <summary>
-    /// Calculates the cost of updating the string of the source node to the string
-    /// of the destination node.
-    /// </summary>
-    /// <param name="n1">a source node for update.</param>
-    /// <param name="n2">a destination node for update.</param>
-    /// <returns>@code 1} if labels of updated nodes are equal, and {@code 0} otherwise.</returns>
-    public float Update(
-        INode<string> n1, 
-        INode<string> n2)
-    {
-        return Equals(n1.NodeData, n2.NodeData) ? 0.0f : 1.0f;
+        /// <summary>
+        ///     Calculates the cost of updating the string of the source node to the string
+        ///     of the destination node.
+        /// </summary>
+        /// <param name="n1">a source node for update.</param>
+        /// <param name="n2">a destination node for update.</param>
+        /// <returns>@code 1} if labels of updated nodes are equal, and {@code 0} otherwise.</returns>
+        public float Update(
+            INode<string> n1,
+            INode<string> n2)
+        {
+            return Equals(n1.NodeData, n2.NodeData) ? 0.0f : 1.0f;
+        }
     }
 }

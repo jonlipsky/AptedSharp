@@ -21,25 +21,30 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp;
+using System.Collections.Generic;
 
-/// <summary>
-/// This is a recursive representation of an ordered tree. Each node stores a
-/// list of pointers to its children. The order of children is significant and
-/// must be observed while implementing a custom input parser.
-/// </summary>
-/// <typeparam name="T">the type of node data (node label).</typeparam>
-public interface INode<T>
+namespace AptedSharp
 {
     /// <summary>
-    /// Information associated to and stored at each node. This can be anything
-    /// and depends on the application, for example, string label, key-value pair,
-    /// list of values, etc.
+    /// This is a recursive representation of an ordered tree. Each node stores a
+    /// list of pointers to its children. The order of children is significant and
+    /// must be observed while implementing a custom input parser.
     /// </summary>
-    T NodeData { get; }
+    /// <typeparam name="T">the type of node data (node label).</typeparam>
+    public interface INode<T>
+    {
+        /// <summary>
+        /// Information associated to and stored at each node. This can be anything
+        /// and depends on the application, for example, string label, key-value pair,
+        /// list of values, etc.
+        /// </summary>
+        T NodeData { get; }
 
-    /// <summary>
-    /// the list with all node's children.
-    /// </summary>
-    IReadOnlyList<INode<T>> Children { get; }
+        INode<T>? Parent { get; }
+    
+        /// <summary>
+        /// the list with all node's children.
+        /// </summary>
+        IReadOnlyList<INode<T>>? Children { get; }
+    }
 }

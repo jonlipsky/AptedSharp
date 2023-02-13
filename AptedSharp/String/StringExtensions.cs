@@ -21,25 +21,23 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp.String;
-
-public static class StringExtensions
+namespace AptedSharp.String
 {
-    /// <summary>
-    /// Get the substring of a string between two indices (similar to how Java does it)
-    /// </summary>
-    /// <param name="value">The string value</param>
-    /// <param name="startIndex">The start index</param>
-    /// <param name="endIndex">The end index</param>
-    /// <returns>The substring</returns>
-    public static string SubstringBetweenIndices(
-        this string value, 
-        int startIndex, 
-        int endIndex)
+    public static class StringExtensions
     {
-        if (value == null)
-            return null;
-
-        return value.Substring(startIndex, endIndex - startIndex);
+        /// <summary>
+        ///     Get the substring of a string between two indices (similar to how Java does it)
+        /// </summary>
+        /// <param name="value">The string value</param>
+        /// <param name="startIndex">The start index</param>
+        /// <param name="endIndex">The end index</param>
+        /// <returns>The substring</returns>
+        public static string SubstringBetweenIndices(
+            this string value,
+            int startIndex,
+            int endIndex)
+        {
+            return value.Substring(startIndex, endIndex - startIndex);
+        }
     }
 }

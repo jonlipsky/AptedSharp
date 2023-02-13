@@ -21,56 +21,67 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp;
+using System.IO;
 
-public static class NodeExtensions
+namespace AptedSharp
 {
-    /// <summary>
-    /// Returns a string representation of the tree in bracket notation.
-    /// </summary>
-    /// <returns>tree in bracket notation.</returns>
-    public static string ToBracketNotationString<T>(
-        this INode<T> node)
+    public static class NodeExtensions
     {
-        var writer = new StringWriter();
-        node.WriteBracketNotationString(writer);
-        return writer.ToString();
-    }
-    
-    /// <summary>
-    /// Writes the node in bracket notation to a StringWriter
-    /// </summary>
-    private static void WriteBracketNotationString<T>(
-        this INode<T> node, 
-        StringWriter? existingWriter = null)
-    {
-        var writer = existingWriter ?? new StringWriter();
-        writer.Write("{");
-        writer.Write(node.NodeData);
-
-        foreach (var child in node.Children)
+        /// <summary>
+        /// Returns a string representation of the tree in bracket notation.
+        /// </summary>
+        /// <returns>tree in bracket notation.</returns>
+        public static string ToBracketNotationString<T>(
+            this INode<T> node)
         {
-            child.WriteBracketNotationString(writer);
+            var writer = new StringWriter();
+            node.WriteBracketNotationString(writer);
+            return writer.ToString();
         }
-
-        writer.Write("}");
-    }
     
-    /// <summary>
-    /// Counts the number of nodes in a tree rooted at this node.
-    ///
-    /// This method runs in linear time in the tree size.
-    /// </summary>
-    /// <returns>number of nodes in the tree rooted at this node.</returns>
-    public static int GetNodeCount<T>(
-        this INode<T> node)
-    {
-        var sum = 1;
-        foreach (var child in node.Children)
+        /// <summary>
+        /// Writes the node in bracket notation to a StringWriter
+        /// </summary>
+        private static void WriteBracketNotationString<T>(
+            this INode<T> node, 
+            StringWriter? existingWriter = null)
         {
-            sum += child.GetNodeCount();
-        }
+            var writer = existingWriter ?? new StringWriter();
+            writer.Write("{");
+            writer.Write(node.NodeData);
 
-        return sum;
+            var children = node.Children;
+            if (children != null)
+            {
+                foreach (var child in children)
+                {
+                    child.WriteBracketNotationString(writer);
+                }
+            }
+
+            writer.Write("}");
+        }
+    
+        /// <summary>
+        /// Counts the number of nodes in a tree rooted at this node.
+        ///
+        /// This method runs in linear time in the tree size.
+        /// </summary>
+        /// <returns>number of nodes in the tree rooted at this node.</returns>
+        public static int GetNodeCount<T>(
+            this INode<T> node)
+        {
+            var sum = 1;
+            var children = node.Children;
+            if (children != null)
+            {
+                foreach (var child in children)
+                {
+                    sum += child.GetNodeCount();
+                }
+            }
+
+            return sum;
+        }
     }
 }

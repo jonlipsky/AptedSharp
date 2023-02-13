@@ -2,7 +2,7 @@
  *
  * Copyright (c) 2017 Mateusz Pawlik
  * Copyright (c) 2022 Jon Lipsky
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -22,21 +22,35 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp.String
+namespace AptedSharp
 {
     /// <summary>
-    ///     This interface specifies methods (currently only one) that must be
-    ///     implemented for a custom input parser.
+    /// This interface specifies the methods to implement to update operation for a tree
+    /// to transform it from it's source form to it's target form
+    /// 
     /// </summary>
-    /// <typeparam name="T">the type of node data.</typeparam>
-    public interface IInputParser<T>
+    /// <typeparam name="T">type of node data.</typeparam>
+    public interface IOperationExecutor<T>
     {
         /// <summary>
-        ///     Convert the input tree passed as string (e.g., bracket notation, XML)
-        ///     into the tree structure.
+        /// Perform the deletion of a node
         /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public Node<T> FromString(string s);
+        /// <param name="n">the node considered to be deleted.</param>
+        public void Delete(INode<T> n);
+
+        /// <summary>
+        /// Perform the insertion of a node
+        /// </summary>
+        /// <param name="n">the node considered to be inserted.</param>
+        public void Insert(INode<T> n);
+
+        /// <summary>
+        /// Perform the updating (mapping) of two nodes.
+        /// </summary>
+        /// <param name="n1">the source node of update.</param>
+        /// <param name="n2">the destination node of update.</param>
+        public void Update(
+            INode<T> n1, 
+            INode<T> n2);
     }
 }

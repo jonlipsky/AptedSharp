@@ -107,7 +107,7 @@ public class CorrectnessTest
         // Initialise APTED.
         var apted = new Apted<StringCostModel, string>(new StringCostModel());
         // This cast is safe due to unit cost.
-        var result = (int)apted.computeEditDistance_spfTest(t1, t2, 0);
+        var result = (int)apted.ComputeEditDistance_spfTest(t1, t2, 0);
         Assert.AreEqual(testCase.D, result);
     }
 
@@ -130,7 +130,7 @@ public class CorrectnessTest
         // Initialise APTED.
         var apted = new Apted<StringCostModel, string>(new StringCostModel());
         // This cast is safe due to unit cost.
-        var result = (int)apted.computeEditDistance_spfTest(t1, t2, 1);
+        var result = (int)apted.ComputeEditDistance_spfTest(t1, t2, 1);
         Assert.AreEqual(testCase.D, result);
     }
 

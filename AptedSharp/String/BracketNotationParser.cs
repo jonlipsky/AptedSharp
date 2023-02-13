@@ -22,117 +22,122 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp.String;
+using System;
+using System.Collections.Generic;
 
-/// <summary>
-/// Parser for the input trees in the bracket notation with a single string-value
-/// label of type {@link StringNodeData}.
-///
-/// Bracket notation encodes the trees with nested parentheses, for example,
-/// in tree {A{B{X}{Y}{F}}{C}} the root node has label A and two children with
-/// labels B and C. Node with label B has three children with labels X, Y, F.
-/// </summary>
-public class BracketNotationParser : IInputParser<string>
+namespace AptedSharp.String
 {
     /// <summary>
-    /// Parses the input tree as a string and converts it to our tree
-    /// representation using the {@link Node} class.
+    ///     Parser for the input trees in the bracket notation with a single string-value
+    ///     label of type {@link StringNodeData}.
+    ///     Bracket notation encodes the trees with nested parentheses, for example,
+    ///     in tree {A{B{X}{Y}{F}}{C}} the root node has label A and two children with
+    ///     labels B and C. Node with label B has three children with labels X, Y, F.
     /// </summary>
-    /// <param name="s">input tree as string in bracket notation.</param>
-    /// <returns>tree representation of the bracket notation input.</returns>
-    public Node<string> FromString(string s)
+    public class BracketNotationParser : IInputParser<string>
     {
-        s = s.SubstringBetweenIndices(s.IndexOf("{", StringComparison.Ordinal), s.LastIndexOf("}", StringComparison.Ordinal) + 1);
-        var node = new Node<string>(GetRoot(s));
-        var c = GetChildren(s);
-        if (c != null)
+        /// <summary>
+        ///     Parses the input tree as a string and converts it to our tree
+        ///     representation using the {@link Node} class.
+        /// </summary>
+        /// <param name="s">input tree as string in bracket notation.</param>
+        /// <returns>tree representation of the bracket notation input.</returns>
+        public Node<string> FromString(string s)
         {
-            foreach (var t in c)
-                node.AddChild(FromString(t));
+            s = s.SubstringBetweenIndices(s.IndexOf("{", StringComparison.Ordinal),
+                s.LastIndexOf("}", StringComparison.Ordinal) + 1);
+            var root = GetRoot(s);
+            if (root == null)
+                throw new Exception($"Unable to get a root from the value {s}");
+            var node = new Node<string>(root);
+            var c = GetChildren(s);
+            if (c != null)
+                foreach (var t in c)
+                    node.AddChild(FromString(t));
+
+            return node;
         }
 
-        return node;
-    }
-
-    private static List<string>? GetChildren(string? s)
-    {
-        if (!string.IsNullOrEmpty(s) && s.StartsWith("{") && s.EndsWith("}"))
+        private static List<string>? GetChildren(string? s)
         {
-            var children = new List<string>();
-            var end = s.IndexOf('{', 1);
-            if (end == -1)
-                return children;
-            var rest = s.SubstringBetweenIndices(end, s.Length - 1);
-            for (int match; rest.Length > 0 && (match = MatchingBracket(rest, 0)) != -1;)
+            if (!string.IsNullOrEmpty(s) && s.StartsWith("{") && s.EndsWith("}"))
             {
-                children.Add(rest.SubstringBetweenIndices(0, match + 1));
-                if (match + 1 < rest.Length)
-                    rest = rest.Substring(match + 1);
-                else
-                    rest = "";
+                var children = new List<string>();
+                var end = s.IndexOf('{', 1);
+                if (end == -1)
+                    return children;
+                var rest = s.SubstringBetweenIndices(end, s.Length - 1);
+                for (int match; rest.Length > 0 && (match = MatchingBracket(rest, 0)) != -1;)
+                {
+                    children.Add(rest.SubstringBetweenIndices(0, match + 1));
+                    if (match + 1 < rest.Length)
+                        rest = rest.Substring(match + 1);
+                    else
+                        rest = "";
+                }
+
+                return children;
             }
 
-            return children;
+            return null;
         }
 
-        return null;
-    }
-
-    private static int MatchingBracket(
-        string? s, 
-        int pos)
-    {
-        if (s == null || pos > s.Length - 1)
-            return -1;
-
-        var open = s[pos];
-        char close;
-        switch (open)
+        private static int MatchingBracket(
+            string? s,
+            int pos)
         {
-            case '{':
-                close = '}';
-                break;
-
-            case '(':
-                close = ')';
-                break;
-
-            case '[':
-                close = ']';
-                break;
-
-            case '<':
-                close = '>';
-                break;
-
-            default:
+            if (s == null || pos > s.Length - 1)
                 return -1;
+
+            var open = s[pos];
+            char close;
+            switch (open)
+            {
+                case '{':
+                    close = '}';
+                    break;
+
+                case '(':
+                    close = ')';
+                    break;
+
+                case '[':
+                    close = ']';
+                    break;
+
+                case '<':
+                    close = '>';
+                    break;
+
+                default:
+                    return -1;
+            }
+
+            pos++;
+            int count;
+            for (count = 1; count != 0 && pos < s.Length; pos++)
+                if (s[pos] == open)
+                    count++;
+                else if (s[pos] == close)
+                    count--;
+
+            if (count != 0)
+                return -1;
+
+            return pos - 1;
         }
 
-        pos++;
-        int count;
-        for (count = 1; count != 0 && pos < s.Length; pos++)
-            if (s[pos] == open)
-                count++;
-            else if (s[pos] == close)
-                count--;
-
-        if (count != 0)
-            return -1;
-
-        return pos - 1;
-    }
-
-    private static string? GetRoot(string? s)
-    {
-        if (!string.IsNullOrEmpty(s) && s.StartsWith("{") && s.EndsWith("}"))
+        private static string? GetRoot(string? s)
         {
-            var end = s.IndexOf('{', 1);
-            if (end == -1)
-                end = s.IndexOf('}', 1);
-            return s.SubstringBetweenIndices(1, end);
-        }
+            if (!string.IsNullOrEmpty(s) && s.StartsWith("{") && s.EndsWith("}"))
+            {
+                var end = s.IndexOf('{', 1);
+                if (end == -1)
+                    end = s.IndexOf('}', 1);
+                return s.SubstringBetweenIndices(1, end);
+            }
 
-        return null;
+            return null;
+        }
     }
 }

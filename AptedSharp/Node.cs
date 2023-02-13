@@ -22,51 +22,58 @@
  * SOFTWARE.
  */
 
-namespace AptedSharp;
+using System.Collections.Generic;
 
-/// <summary>
-/// This is a recursive representation of an ordered tree. Each node stores a
-/// list of pointers to its children. The order of children is significant and
-/// must be observed while implementing a custom input parser.
-/// </summary>
-/// <typeparam name="T">the type of node data (node label).</typeparam>
-public class Node<T> : INode<T>
+namespace AptedSharp
 {
-    /// <summary>
-    /// Array of pointers to this node's children. The order of children is
-    /// significant due to the definition of ordered trees.
-    /// </summary>
-    private readonly List<Node<T>> _children = new();
 
     /// <summary>
-    /// Constructs a new node with the passed node data and an empty list of
-    /// children.
+    /// This is a recursive representation of an ordered tree. Each node stores a
+    /// list of pointers to its children. The order of children is significant and
+    /// must be observed while implementing a custom input parser.
     /// </summary>
-    /// <param name="nodeData">instance of node data (node label).</param>
-    public Node(T nodeData)
+    /// <typeparam name="T">the type of node data (node label).</typeparam>
+    public class Node<T> : INode<T>
     {
-        NodeData = nodeData;
-    }
+        /// <summary>
+        /// Array of pointers to this node's children. The order of children is
+        /// significant due to the definition of ordered trees.
+        /// </summary>
+        private readonly List<Node<T>> _children = new();
 
-    /// <summary>
-    /// Information associated to and stored at each node. This can be anything
-    /// and depends on the application, for example, string label, key-value pair,
-    /// list of values, etc.
-    /// </summary>
-    public T NodeData { get; }
+        /// <summary>
+        /// Constructs a new node with the passed node data and an empty list of
+        /// children.
+        /// </summary>
+        /// <param name="nodeData">instance of node data (node label).</param>
+        public Node(T nodeData)
+        {
+            NodeData = nodeData;
+        }
 
-    /// <summary>
-    /// Adds a new child at the end of children list. The added child will be
-    /// the last child of this node.
-    /// </summary>
-    /// <param name="c">child node to add.</param>
-    public void AddChild(Node<T> c)
-    {
-        _children.Add(c);
+        /// <summary>
+        /// Information associated to and stored at each node. This can be anything
+        /// and depends on the application, for example, string label, key-value pair,
+        /// list of values, etc.
+        /// </summary>
+        public T NodeData { get; }
+
+        public INode<T>? Parent { get; private set; }
+
+        /// <summary>
+        /// Adds a new child at the end of children list. The added child will be
+        /// the last child of this node.
+        /// </summary>
+        /// <param name="c">child node to add.</param>
+        public void AddChild(Node<T> c)
+        {
+            _children.Add(c);
+            c.Parent = this;
+        }
+
+        /// <summary>
+        /// the list with all node's children.
+        /// </summary>
+        public IReadOnlyList<INode<T>> Children => _children;
     }
-    
-    /// <summary>
-    /// the list with all node's children.
-    /// </summary>
-    public IReadOnlyList<INode<T>> Children => _children;
 }
