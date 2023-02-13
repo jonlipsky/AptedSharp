@@ -1688,7 +1688,7 @@ namespace AptedSharp
         /// </summary>
         /// <param name="it2"> node indexer.</param>
         /// <param name="subtreeRootNode"> keyroot node - recursion point.</param>
-        /// <param name="pathID"> left-to-right preorder id of the leftmost leaf node of subtreeRootNode.</param>
+        /// <param name="pathId"> left-to-right preorder id of the leftmost leaf node of subtreeRootNode.</param>
         /// <param name="keyRoots"> array that stores all key roots in the order of their left-to-right preorder ids.</param>
         /// <param name="index"> the index of keyRoots array where to store the next keyroot node.</param>
         /// <returns>the index of the first keyroot node to process.</returns>
@@ -1726,8 +1726,8 @@ namespace AptedSharp
         /// </summary>
         /// <param name="it1"> node indexer of the left-hand input subtree.</param>
         /// <param name="it2"> node indexer of the right-hand input subtree.</param>
-        /// <param name="it1subtree"> left-to-right preorder id of the root node of the left-hand input subtree.</param>
-        /// <param name="it2subtree"> left-to-right preorder id of the root node of the right-hand input subtree.</param>
+        /// <param name="it1Subtree"> left-to-right preorder id of the root node of the left-hand input subtree.</param>
+        /// <param name="it2Subtree"> left-to-right preorder id of the root node of the right-hand input subtree.</param>
         /// <param name="forestdist"> the array to be filled in with intermediate distances of sub-forest pairs.</param>
         /// <param name="treesSwapped"> says if the order of input subtrees has been swapped compared to the order of the initial input trees. Used for accessing delta array and deciding on the edit operation.</param>
         private void TreeEditDist(NodeIndexer<T, TCostModel> it1, NodeIndexer<T, TCostModel> it2, int it1Subtree, int it2Subtree, float[][] forestdist, bool treesSwapped)
@@ -1959,8 +1959,8 @@ namespace AptedSharp
         /// <summary>
         /// Decodes the path from the optimal strategy to its type.
         /// </summary>
-        /// <param name="pathIDWithPathIDOffset"> raw path id from strategy array.</param>
-        /// <param name="pathIDOffset"> offset used to distinguish between paths in the source and destination trees.</param>
+        /// <param name="pathIdWithPathIdOffset"> raw path id from strategy array.</param>
+        /// <param name="pathIdOffset"> offset used to distinguish between paths in the source and destination trees.</param>
         /// <param name="it"> node indexer.</param>
         /// <param name="currentRootNodePreL"> the left-to-right preorder id of the current subtree processed in tree decomposition phase.</param>
         /// <param name="currentSubtreeSize"> the size of the subtree currently processed in tree decomposition phase.</param>
@@ -2142,7 +2142,7 @@ namespace AptedSharp
         /// <param name="ted2"> node indexer of the destination input tree.</param>
         /// <param name="i"> subtree root of source tree that is to be mapped.</param>
         /// <param name="j"> subtree root of destination tree that is to be mapped.</param>
-        /// <param name="forestdist"> array to store distances between sub-forest pairs.</param>
+        /// <param name="forestDist"> array to store distances between sub-forest pairs.</param>
         private void ForestDist(NodeIndexer<T, TCostModel> ted1, NodeIndexer<T, TCostModel> ted2, int i, int j, float[][] forestDist)
         {
             forestDist[ted1.PostLToLld[i - 1]][ted2.PostLToLld[j - 1]] = 0;
